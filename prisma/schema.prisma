@@ -8,9 +8,27 @@ datasource db {
 }
 
 model User {
-    id          Int     @id @default(autoincrement())
-    email       String  @unique
-    password    String
-    username    String
-    createdAt   DateTime  @default(now())
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  username  String
+  createdAt DateTime @default(now())
+  courses   Course[]
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  courses     Course[]
+}
+
+model Course {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  author     User     @relation(fields: [authorId], references: [id])
+  authorId   Int
+  createdAt  DateTime @default(now())
 }

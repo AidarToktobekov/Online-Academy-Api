@@ -15,12 +15,15 @@ export class AuthService {
                 email: data.email,
                 password: hashedPassword,
                 username: data.username,
+            },
+            include: {
+                courses: true,
             }
         })
     }
 
     async login(email: string, password: string) {
-        const user = await this.prisma.user.findUnique({where: {email}});
+        const user = await this.prisma.user.findUnique({where: {email}, include: {courses: true}});
 
         if (!user || !(await bcrypt.compare(password, user.password))){
             throw new UnauthorizedException('Invalid credentials');
@@ -35,6 +38,7 @@ export class AuthService {
                 email: user.email,
                 username: user.username,
                 createdAt: user.createdAt,
+                courses: user.courses,
             }
         }
     }
