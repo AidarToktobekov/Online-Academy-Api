@@ -7,14 +7,14 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
     constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-    async register(data: {email: string, password: string, username: string}) {
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-
+    async register(body: {email: string, password: string, username: string, avatarUrl: string | null}) {
+        const hashedPassword = await bcrypt.hash(body.password, 10);
         return this.prisma.user.create({
             data:{
-                email: data.email,
+                email: body.email,
                 password: hashedPassword,
-                username: data.username,
+                username: body.username,
+                avatarUrl: body.avatarUrl,
             },
             include: {
                 courses: true,
@@ -38,6 +38,7 @@ export class AuthService {
                 email: user.email,
                 username: user.username,
                 createdAt: user.createdAt,
+                avatarUrl: user.avatarUrl,
                 courses: user.courses,
             }
         }

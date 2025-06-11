@@ -14,6 +14,7 @@ model User {
   username  String
   createdAt DateTime @default(now())
   courses   Course[]
+  avatarUrl String?
 }
 
 model Category {
